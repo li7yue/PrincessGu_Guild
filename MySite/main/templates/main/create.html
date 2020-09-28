@@ -1,0 +1,25 @@
+<!-- child template that inherit from the base template -->
+<!-- We create a form here and pass it to views.py -->
+{% extends "main/base.html" %}
+
+{% block title %}
+Create New List
+{% endblock %}
+
+{% block content %}
+<h3>Create Page</h3>
+<br>
+<!-- POST a form to views via /create/ -->
+<!-- The {{form}} tag is what will represent the form that we create from within our python code.
+We will pass it to the view under the name form and it will generate a form for us. -->
+<!-- the form has only one field, the name -->
+<form method="POST" action="/create/" class="form-group">
+    {% csrf_token %}<!-- everytime create a form -->
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <button name="save" type="submit" class="btn btn-success">Create</button>
+        </div>{{form.name}}
+        <!-- this will be passed to views, representing the list that we have created -->
+    </div>
+</form>
+{% endblock %}

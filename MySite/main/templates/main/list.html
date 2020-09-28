@@ -1,0 +1,44 @@
+<!-- child template that inherit from the base template -->
+<!-- This template will be responsible for displaying the contents -->
+<!-- variables are being passed to this file from views, using return render -->
+{% extends "main/base.html" %}
+
+{% block title %}
+View List
+{% endblock %}
+
+{% block content %}
+<!-- putting py code inside of a html file -->
+<!-- variables are embeded in double brackets -->
+<!-- variables being pass to this file has attributes -->
+<h1>{{var_list.name}}</h1><!-- show the name attribute of the variable -->
+<!-- redirect to urls.py, and the int:list_id will be detected, direct to index -->
+<!-- adding a # in the end as a mark, this is will not affect redirection  -->
+<form method="POST" action="#">
+    {% csrf_token %}
+    <!-- show items in the list, and attribute of items -->
+    {% for item in var_list.item_set.all %}
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    {% if item.complete == True %}
+                        <input type="checkbox", value="clicked", name="c{{item.id}}" checked>
+                    {% else %}
+                        <input type="checkbox", value="clicked", name="c{{item.id}}">
+                    {% endif %}
+                </div>
+            </div>
+            <input type="text", value="{{item.text}}" class="form-control">
+        </div>
+    {% endfor %}
+    <!-- modify attributes, or add an item -->
+    <!-- modified info would be gotten by views.index-->
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <button type="submit", name="newItem", value="newItem" class="btn btn-success">Add Item</button>
+        </div>
+        <input type="text", name="new">
+    </div>
+    <button type="submit", name="save", value="save" class="btn btn-success">Save</button>
+</form>
+{% endblock %}

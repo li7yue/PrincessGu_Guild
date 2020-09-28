@@ -1,0 +1,12 @@
+<!-- This page allow us to view all of the current users To Do Lists -->
+{% extends 'main/base.html' %}
+
+{% block title %} View {% endblock %}
+
+{% block content %}
+    <!-- loop through user's todolist(ForeignKey) and display them 
+    each list direct to its own page using its id -->
+    {% for td in user.todolist.all %}
+        <p><a href="/{{td.id}}">{{td.name}}</a></p>
+    {% endfor %}
+{% endblock %}

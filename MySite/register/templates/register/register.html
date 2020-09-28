@@ -1,0 +1,14 @@
+<!-- modify register page -->
+{% extends "main/base.html" %}
+
+{% block title %} Create an Account {% endblock %}
+{% load crispy_forms_tags %}<!-- using crispy form -->
+
+{% block content %}
+<form method="POST" class="form-group">
+    {% csrf_token %}
+    <!-- receving form from views-->
+    {{form|crispy}}<!-- applying crispy -->
+    <button type="submit" class="btn btn-success">Register</button>
+</form>
+{% endblock %}
