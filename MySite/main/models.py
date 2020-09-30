@@ -26,6 +26,21 @@ class Item(models.Model):
     todolist = models.ForeignKey(ToDoList, on_delete=models.CASCADE)
     # ForeignKey links Item to ToDoList(Create a Union)
     text = models.CharField(max_length=200)
+    # Team Set: Preset team set
+    
+    # user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="item", null=True)
+    # # Owner: ForeignKey links Item to Knights
+    
+    owner = models.CharField(max_length=200)
+    # Owner: Preset knight, no foreignkey
+    dmg = models.CharField(max_length=200)
+    # Damage: Preset
+    time = models.CharField(max_length=200)
+    # Time: Preset
+    actualDmg = models.CharField(max_length=200)
+    # Damage: Actual
+
     complete = models.BooleanField()
     def __str__(self):
         return self.text
+        # To be modified

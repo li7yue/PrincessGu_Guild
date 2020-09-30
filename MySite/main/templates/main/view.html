@@ -4,9 +4,22 @@
 {% block title %} View {% endblock %}
 
 {% block content %}
+<h3>
+<pre>
+池, 请自行选刀
+The Pool, please select your hits
+</pre>
+</h3>
+<p>每天, 请选择相互不冲突的三刀</p>
+<form method="POST" action="/view/">
+    {% csrf_token %}
     <!-- loop through user's todolist(ForeignKey) and display them 
     each list direct to its own page using its id -->
-    {% for td in user.todolist.all %}
+    {% for td in all_list %}
         <p><a href="/{{td.id}}">{{td.name}}</a></p>
+        {% for i in td.item_set.all %}
+            <p>{{i.id}} - {{i.text}} - {{i.dmg}} - {{i.time}} - {{i.owner}} - {{i.complete}}<button type="submit", name="claim", value={{i.id}} class="btn btn-success">Claim</button></p>
+        {% endfor %}
     {% endfor %}
+</form>
 {% endblock %}

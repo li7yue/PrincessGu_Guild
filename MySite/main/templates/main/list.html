@@ -8,10 +8,20 @@ View List
 {% endblock %}
 
 {% block content %}
+<h3>
+<pre>
+刀池预设
+Pre-set the Pool
+</pre>
+</h3>
+<p>
+输入刀型, 标伤, 出刀时限, 点击Add Item录入预设刀, Duplicate Previous Item可以直接复制录入上一个刀型;
+勾选预设刀, 并且点击Save Completions, 会改变此刀状态(未出 或 已出)
+</p>
 <!-- putting py code inside of a html file -->
 <!-- variables are embeded in double brackets -->
 <!-- variables being pass to this file has attributes -->
-<h1>{{var_list.name}}</h1><!-- show the name attribute of the variable -->
+<h1>Boss: {{var_list.name}}</h1><!-- show the name attribute of the variable -->
 <!-- redirect to urls.py, and the int:list_id will be detected, direct to index -->
 <!-- adding a # in the end as a mark, this is will not affect redirection  -->
 <form method="POST" action="#">
@@ -28,7 +38,9 @@ View List
                     {% endif %}
                 </div>
             </div>
-            <input type="text", value="{{item.text}}" class="form-control">
+            <input type="text", value="{{item.text}}", name="lastteam" class="form-control">
+            <input type="text", value="{{item.dmg}}", name="lastdmg" class="form-control">
+            <input type="time", value="{{item.time}}", name="lasttime" class="form-control">
         </div>
     {% endfor %}
     <!-- modify attributes, or add an item -->
@@ -37,8 +49,11 @@ View List
         <div class="input-group-prepend">
             <button type="submit", name="newItem", value="newItem" class="btn btn-success">Add Item</button>
         </div>
-        <input type="text", name="new">
+            Team Set: <input type="text", name="preteam">
+            Damage Recommended: <input type="text", name="predmg">
+            Check Before: <input type="time", name="pretime">
+            <button type="submit", name="duplicateItem", value="duplicateItem" class="btn btn-success">Duplicate Previous Item</button>
     </div>
-    <button type="submit", name="save", value="save" class="btn btn-success">Save</button>
+    <button type="submit", name="save", value="save" class="btn btn-success">Save Completions</button>
 </form>
 {% endblock %}
