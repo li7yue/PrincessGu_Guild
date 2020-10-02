@@ -43,7 +43,7 @@ def index(response, list_id):# this def accept addition attribute " an int", cam
                 else:
                     print("invalid")
 
-            elif response.POST.get("duplicateItem"):
+            elif response.POST.get("duplicateItem") and response.POST.get("lastteam") and response.POST.get("lastdmg") and response.POST.get("lasttime"):
                 new_text = response.POST.get("lastteam")# duplicate item
                 new_dmg = response.POST.get("lastdmg")# duplicate dmg
                 new_time = response.POST.get("lasttime")# duplicate time
