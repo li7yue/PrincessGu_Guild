@@ -14,15 +14,24 @@ Knight status and Report
 <form method="POST" action="/knight/">
     {% csrf_token %}
 <!-- loop through all items and pick current knight's items -->
-    <p>Hit Damage: <input type="text", name="actualdmg"></p>
+    <p>Hit Damage: <input type="text", name="actualdmg" required><button type="submit", name="submit" class="btn btn-success">Report</button></p>
     {% for td in all_list %}
-        <p><a href="/{{td.id}}">{{td.name}}</a></p>
+        <p><input type="radio" name="reportList", value={{td.id}} required> - <a href="/{{td.id}}">{{td.name}}</a></p>
         {% for i in td.item_set.all %}
             {% if user.username == i.owner%}
                 <!-- submit to check complete and modify attribute: actualDmg -->
-                <p>{{i.id}} - {{i.text}} - {{i.dmg}} - {{i.time}} - {{i.owner}} - {{i.complete}} - <button type="submit", name="reportItem", value={{i.id}} class="btn btn-success">Report</button> - Actual Dmg: {{i.actualDmg}}</p>
+                <p>
+                    {% if not i.complete %}
+                        <input type="radio" name="reportItem", value={{i.id}} required>
+                    {% else %}
+                        <input type="radio" name="reportItem", value={{i.id}} disabled>
+                    {% endif %}
+                    - {{i.id}} - {{i.text}} - {{i.dmg}} - {{i.time}} - {{i.owner}} - {{i.complete}} - Actual Dmg: {{i.actualDmg}}
+                </p>
             {% endif %}
         {% endfor %}
+        <p><input type="radio" name="reportItem", value="bonus_hit" required> - Bonus Hit</p>
+        <p><input type="radio" name="reportItem", value="last_hit" required> - Last Hit</p>
     {% endfor %}
 </form>
 {% endblock %}

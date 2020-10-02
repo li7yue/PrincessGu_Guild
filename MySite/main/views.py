@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import ToDoList, Item
 from .forms import CreateNewList
+import copy
 # import class from models, if we want to pass them to html files as variables
 
 def index(response, list_id):# this def accept addition attribute " an int", came from urls.py
@@ -10,6 +11,7 @@ def index(response, list_id):# this def accept addition attribute " an int", cam
     code for this view(page): to be updated
     '''
     var_list = ToDoList.objects.get(id=list_id)
+
     # if the list selected (selected by id) is in the reposne.user's todolist
     # it mean this list belongs to the user
     # else redirect to home page
@@ -37,7 +39,7 @@ def index(response, list_id):# this def accept addition attribute " an int", cam
                 if len(new_text) > 0 and len(new_dmg) > 0 and len(new_time) > 0:# add some naming rules
                     # the instance of ToDoList inherit django's models.Model class
                     # which has the create function
-                    var_list.item_set.create(text=new_text, dmg=new_dmg, time=new_time, complete=False)
+                    var_list.item_set.create(text=new_text, dmg=int(new_dmg), time=new_time, actualDmg=0, complete=False)
                 else:
                     print("invalid")
 
@@ -45,7 +47,7 @@ def index(response, list_id):# this def accept addition attribute " an int", cam
                 new_text = response.POST.get("lastteam")# duplicate item
                 new_dmg = response.POST.get("lastdmg")# duplicate dmg
                 new_time = response.POST.get("lasttime")# duplicate time
-                var_list.item_set.create(text=new_text, dmg=new_dmg, time=new_time, complete=False)
+                var_list.item_set.create(text=new_text, dmg=int(new_dmg), time=new_time, actualDmg=0, complete=False)
 
         return render(response, "main/list.html", {"var_list":var_list})
         # render passes response and variable(var_list) to the templates/main/list.html
@@ -75,7 +77,9 @@ def create(response):
             form = CreateNewList(response.POST)
             if form.is_valid():# check if form is valid
                 form_name = form.cleaned_data["name"]
-                tdlist = ToDoList(name=form_name)
+                form_r_dmg = form.cleaned_data["required_dmg"]
+                form_hp = form.cleaned_data["hp"]
+                tdlist = ToDoList(name=form_name, required_dmg=int(form_r_dmg), hp=int(form_hp), hp_current=int(form_hp))
                 tdlist.save()
                 # after we login, the response has a user attribute
                 # whenever we create a new list, it will be added to the current logged in user
@@ -108,10 +112,30 @@ def knight(response):
     if str(response.user) != "AnonymousUser":
         all_list = ToDoList.objects.all()
         if response.method == "POST":
-            item = Item.objects.get(id=response.POST.get('reportItem'))
-            if (not item.complete) and (response.POST.get('actualdmg') != ''):
-                item.complete = True
-                item.actualDmg = response.POST.get('actualdmg')
-                item.save()
+            todolist = ToDoList.objects.get(id=response.POST.get('reportList'))
+
+            if response.POST.get('reportItem') == 'last_hit':
+                todolist.hp_current = 0
+                todolist.save()
+            elif response.POST.get('reportItem') == 'bonus_hit':
+                if response.POST.get('actualdmg') != '':
+                    todolist.hp_current = todolist.hp_current - int(response.POST.get('actualdmg'))
+                    todolist.save()
+            else:
+                item = Item.objects.get(id=response.POST.get('reportItem'))
+                if (not item.complete) and (response.POST.get('actualdmg') != ''):
+                    item.complete = True
+                    item.actualDmg = int(response.POST.get('actualdmg'))
+                    todolist.hp_current = todolist.hp_current - int(response.POST.get('actualdmg'))
+                    todolist.save()
+                    item.save()
+
         return render(response, "main/knight.html", {"all_list": all_list})
     return render(response, "main/view.html")
+
+def overview(response):
+    '''
+    code for overview guild status
+    '''
+    all_list = ToDoList.objects.all()
+    return render(response, "main/overview.html", {"all_list": all_list})

@@ -1,0 +1,23 @@
+<!-- This page allow us to overview the guild status -->
+{% extends 'main/base.html' %}
+
+{% block title %} Overview {% endblock %}
+
+{% block content %}
+<h3>
+<pre>
+总览, 当前状态
+Overview, status
+</pre>
+</h3>
+
+<form method="POST" action="/view/">
+    {% csrf_token %}
+    <!-- loop through user's todolist(ForeignKey) and display them 
+    each list direct to its own page using its id -->
+    {% for td in all_list %}
+        <p><a href="/{{td.id}}">{{td.name}}</a> - Current Hp: {{td.hp_current}} / {{td.hp}}</p>
+    {% endfor %}
+</form>
+
+{% endblock %}

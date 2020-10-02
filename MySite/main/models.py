@@ -15,6 +15,9 @@ class ToDoList(models.Model):
     '''
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="todolist", null=True)
     name = models.CharField(max_length=200)
+    required_dmg = models.IntegerField()
+    hp = models.IntegerField()
+    hp_current = models.IntegerField()
     def __str__(self):
         return self.name
 
@@ -33,11 +36,11 @@ class Item(models.Model):
     
     owner = models.CharField(max_length=200)
     # Owner: Preset knight, no foreignkey
-    dmg = models.CharField(max_length=200)
+    dmg = models.IntegerField()
     # Damage: Preset
     time = models.CharField(max_length=200)
     # Time: Preset
-    actualDmg = models.CharField(max_length=200)
+    actualDmg = models.IntegerField()
     # Damage: Actual
 
     complete = models.BooleanField()

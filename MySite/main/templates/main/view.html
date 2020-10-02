@@ -18,7 +18,12 @@ The Pool, please select your hits
     {% for td in all_list %}
         <p><a href="/{{td.id}}">{{td.name}}</a></p>
         {% for i in td.item_set.all %}
-            <p>{{i.id}} - {{i.text}} - {{i.dmg}} - {{i.time}} - {{i.owner}} - {{i.complete}}<button type="submit", name="claim", value={{i.id}} class="btn btn-success">Claim</button></p>
+            <p>
+                {{i.id}} - {{i.text}} - {{i.dmg}} - {{i.time}} - {{i.owner}} - {{i.complete}}
+                {% if not i.owner%}
+                    <button type="submit", name="claim", value={{i.id}} class="btn btn-success">Claim</button>
+                {% endif %}
+            </p>
         {% endfor %}
     {% endfor %}
 </form>
